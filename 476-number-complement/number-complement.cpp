@@ -1,24 +1,10 @@
 class Solution {
 public:
     int findComplement(int num) {
-        vector<int> binary;
-        int number = num;
+        int number = num, ans = 0, i = 0;
         while (number) {
-            binary.push_back(number % 2);
+            ans += ((number % 2 ? 0 : 1) * pow(2, i++));
             number = number / 2;
-        }
-        reverse(binary.begin(), binary.end());
-
-        for (int i = 0; i < binary.size(); i++) {
-            if (binary[i] == 0)
-                binary[i] = 1;
-            else
-                binary[i] = 0;
-        }
-
-        int ans = 0;
-        for (int i = binary.size() - 1; i >= 0; i--) {
-            ans += (binary[i] * pow(2, (binary.size() - 1 - i)));
         }
         return ans;
     }
