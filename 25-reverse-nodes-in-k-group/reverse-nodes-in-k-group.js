@@ -10,33 +10,47 @@
  * @param {number} k
  * @return {ListNode}
  */
-var reverseKGroup = function(head, k) {
+
+var reverseLinkedList = function (head) {
     let temp = head;
-    let len = 0;
-    while(temp){
-        len++;
+    let prev = null;
+    while (temp) {
+        let front = temp.next;
+        temp.next = prev;
+        prev = temp;
+        temp = front;
+    }
+    return prev;
+}
+
+var getKthNode = function (temp, k) {
+    k -= 1;
+    while (temp && k > 0) {
+        k--;
         temp = temp.next;
     }
+    return temp;
+}
 
-    let dummy = new ListNode(0);
-    dummy.next = head;
-    let group = dummy;
-
-    while(len >= k){
-        let curr = group.next;
-        let next = curr.next;
-
-        for(let i = 1; i <k; i++){
-            if(next !== null)
-                curr.next = next.next; 
-            next.next = group.next;
-            group.next = next;
-            next = curr.next;
+var reverseKGroup = function (head, k) {
+    let temp = head;
+    let prevLast = null;
+    while (temp) {
+        let kThNode = getKthNode(temp, k);
+        if (kThNode === null) {
+            if (prevLast)
+                prevLast.next = temp;
+            break;
         }
-
-        group = curr;
-        len -= k;
-        
+        let nextNode = kThNode.next;
+        kThNode.next = null;
+        reverseLinkedList(temp);
+        if (temp === head)
+            head = kThNode;
+        else
+            prevLast.next = kThNode;
+        prevLast = temp;
+        temp = nextNode;
     }
-    return dummy.next;    
+    return head;
 };
